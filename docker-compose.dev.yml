@@ -1,0 +1,36 @@
+services:
+  grpc-hello:
+    build: 
+      context: ./services/grpc-hello
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./services/grpc-hello/app:/app/app
+    command: python app/server.py
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  grpc-goodbye:
+    build: 
+      context: ./services/grpc-goodbye
+    ports:
+      - "50052:50052"
+    volumes:
+      - ./services/grpc-goodbye/app:/app/app
+    command: python app/server.py
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  grpc-api-gateway:
+    build:
+      context: ./services/grpc-api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - grpc-hello
+      - grpc-goodbye
+    volumes:
+      - ./services/grpc-api-gateway/app:/app/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - PYTHONUNBUFFERED=1

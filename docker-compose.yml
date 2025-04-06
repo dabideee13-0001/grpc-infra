@@ -1,0 +1,21 @@
+services:
+  grpc-hello:
+    build: 
+      context: ./services/grpc-hello
+    ports:
+      - "50051:50051"
+  
+  grpc-goodbye:
+    build: 
+      context: ./services/grpc-goodbye
+    ports:
+      - "50052:50052"
+
+  grpc-api-gateway:
+    build:
+      context: ./services/grpc-api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - grpc-hello
+      - grpc-goodbye
