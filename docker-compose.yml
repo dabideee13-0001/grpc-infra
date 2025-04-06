@@ -4,12 +4,14 @@ services:
       context: ./services/grpc-hello
     ports:
       - "50051:50051"
+    restart: unless-stopped
   
   grpc-goodbye:
     build: 
       context: ./services/grpc-goodbye
     ports:
       - "50052:50052"
+    restart: unless-stopped
 
   grpc-api-gateway:
     build:
@@ -19,3 +21,4 @@ services:
     depends_on:
       - grpc-hello
       - grpc-goodbye
+    restart: unless-stopped
